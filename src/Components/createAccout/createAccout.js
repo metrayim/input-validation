@@ -1,14 +1,46 @@
 import React, { Component } from 'react'
-import { Text, View, SafeAreaView, Image, TextInput, StyleSheet, TouchableOpacity } from 'react-native'
+import { Text, View, SafeAreaView, Image, TextInput, StyleSheet, TouchableOpacity,Button } from 'react-native'
 import { Icon } from 'react-native-elements';
 import { Dropdown } from 'react-native-material-dropdown';
+import ImagePicker from 'react-native-image-picker';
 
 export class createAccout extends Component {
     static navigationOptions = ({ navigation }) => ({
         headerLeft: <LeftMenuButton navigate={navigation} />,
         title: 'ចុះឈ្មោះ'
     });
+    options = {
+        title: 'Select Avatar',
+        customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
+        storageOptions: {
+          skipBackup: true,
+          path: 'images',
+        },
+      };
+      getImage=()=>{
+        ImagePicker.showImagePicker(this.options, (response) => {
+            console.log('Response = ', response);
+          
+            if (response.didCancel) {
+              console.log('User cancelled image picker');
+            } else if (response.error) {
+              console.log('ImagePicker Error: ', response.error);
+            } else if (response.customButton) {
+              console.log('User tapped custom button: ', response.customButton);
+            } else {
+              const source = { uri: response.uri };
+          
+              // You can also display the image using data:
+              // const source = { uri: 'data:image/jpeg;base64,' + response.data };
+          
+              this.setState({
+                avatarSource: source,
+              });
+            }
+          });
+      }
     state = {
+        avatarSource:'',
         name: {
             value: '',
             valid: false,
@@ -60,19 +92,23 @@ export class createAccout extends Component {
         }
         
         else {
-            this.props.navigation.navigate('Home', { name: this.state.name.value, pass: this.state.pass.value, email: this.state.email.value })
-            this.setState({ name: '', pass: '', email: '' })
+            this.props.navigation.navigate('Home', { name: this.state.name.value, pass: this.state.pass.value, email: this.state.email.value,avatarSource:this.state.avatarSource })
+            this.setState({ name: '', pass: '', email: '',avatarSource:'' })
         }
     }
     render() {
         let data = [{ value: 'BTS' }, { value: 'SR', }, { value: 'KPS', }];
+        const {avatarSource}=this.state;
+        const image=avatarSource? avatarSource:{uri:'https://techcrunch.com/wp-content/uploads/2010/07/github-logo.png?w=512'}
         return (
             <SafeAreaView>
-                <View style={{ justifyContent: "center", flexDirection: 'row', marginTop: 30 }}>
-                    <Image source={{ uri: 'https://techcrunch.com/wp-content/uploads/2010/07/github-logo.png?w=512' }} style={{ width: 100, height: 100 }} />
+            {/* <Button title="getImage" onPress={()=>{this.getImage()}}/>
+            <Image source={this.state.avatarSource} style={{width:50,height:50}} /> */}
+                <TouchableOpacity onPress={()=>{this.getImage()}} style={{ justifyContent: "center", flexDirection: 'row', marginTop: 30 }}>
+                    <Image source={image} style={{ width: 100, height: 100,borderRadius:100 }} />
 
-                </View>
-                <View style={{ justifyContent: "center", flexDirection: 'row', marginTop: 10 }}>
+                </TouchableOpacity>
+                <View style={{ justifyContent: "center", flexDirection: 'row', marginTop: 10,marginBottom:40 }}>
                     <Text>សូមស្វាគមន៍ការចូលមកកាន់កម្មវិធីរបស់ខ្ញុំ</Text>
                 </View>
                 <View>
@@ -130,33 +166,34 @@ const styles = StyleSheet.create({
     dropDown: {
         height: 65,
         width: '90%',
-        textAlign: 'center',
         borderWidth: 1,
         borderColor: '#028b53',
         borderRadius: 8,
-        marginTop: 30,
+        marginTop: 10,
         marginLeft: 15,
         paddingLeft: 20,
     },
     textInputStyle1: {
         height: 40,
         width: '90%',
-        textAlign: 'center',
+        // textAlign: 'center',
         borderWidth: 1,
         borderColor: '#028b53',
         borderRadius: 8,
         marginTop: 0,
-        marginLeft: 15
+        marginLeft: 15,
+        paddingLeft: 20
     },
     textInputStyle2: {
         height: 40,
         width: '90%',
-        textAlign: 'center',
+        // textAlign: 'center',
         borderWidth: 1,
         borderColor: '#028b53',
         borderRadius: 8,
         marginTop: 10,
-        marginLeft: 15
+        marginLeft: 15,
+        paddingLeft: 20
     },
     button: {
 

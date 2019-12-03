@@ -24,13 +24,13 @@ export class home extends Component {
     render() {
         const { params } = this.props.navigation.state;
         const name = params ? params.name : null;
-        const pass= params? params.pass:null;
+        const image= params? params.avatarSource:{ uri: 'https://techcrunch.com/wp-content/uploads/2010/07/github-logo.png?w=512' };
 
         console.log(this.props.navigation.state, 'this is render metra')
         return (
             <SafeAreaView>
                 <View style={{ justifyContent: "center", flexDirection: 'row', marginTop: 200 }}>
-                    <Image source={{ uri: 'https://techcrunch.com/wp-content/uploads/2010/07/github-logo.png?w=512' }} style={{ width: 150, height: 150 }} />
+                    <Image source={image} style={{ width: 150, height: 150 ,borderRadius:100}} />
 
                 </View>
                 <View style={{ justifyContent: "center", flexDirection: 'row', marginTop: 10 }}>
